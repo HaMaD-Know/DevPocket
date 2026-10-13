@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="DevPocket — Privacy-first developer toolkit. JSON, Base64, JWT, UUID, SHA-256, and more. All processing happens locally in your browser." />
+  <meta name="theme-color" content="#0f172a" />
+  <title>DevPocket — Developer Toolkit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- No analytics, no tracking, no external scripts that process user data -->
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" aria-label="Tool navigation">
+      <div class="sidebar-header">
+        <a href="#json" class="logo" data-tool="json">
+          <span class="logo-icon" aria-hidden="true">DP</span>
+          DevPocket
+        </a>
+      </div>
+      <nav class="sidebar-nav" role="navigation">
+        <div class="nav-section">
+          <p class="nav-section-title">Encoding</p>
+          <a href="#json" class="nav-link active" data-tool="json" aria-current="page">
+            <span class="nav-icon" aria-hidden="true">{ }</span> JSON
+          </a>
+          <a href="#base64" class="nav-link" data-tool="base64">
+            <span class="nav-icon" aria-hidden="true">64</span> Base64
+          </a>
+          <a href="#url" class="nav-link" data-tool="url">
+            <span class="nav-icon" aria-hidden="true">🔗</span> URL
+          </a>
+          <a href="#jwt" class="nav-link" data-tool="jwt">
+            <span class="nav-icon" aria-hidden="true">🔑</span> JWT
+          </a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">Generators</p>
+          <a href="#uuid" class="nav-link" data-tool="uuid">
+            <span class="nav-icon" aria-hidden="true">🆔</span> UUID
+          </a>
+          <a href="#hash" class="nav-link" data-tool="hash">
+            <span class="nav-icon" aria-hidden="true">#</span> SHA-256
+          </a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">Utilities</p>
+          <a href="#timestamp" class="nav-link" data-tool="timestamp">
+            <span class="nav-icon" aria-hidden="true">⏱</span> Timestamp
+          </a>
+          <a href="#textstats" class="nav-link" data-tool="textstats">
+            <span class="nav-icon" aria-hidden="true">¶</span> Text Counter
+          </a>
+          <a href="#regex" class="nav-link" data-tool="regex">
+            <span class="nav-icon" aria-hidden="true">.*</span> Regex
+          </a>
+          <a href="#color" class="nav-link" data-tool="color">
+            <span class="nav-icon" aria-hidden="true">🎨</span> Color
+          </a>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="privacy-badge" title="All processing is local">🔒 100% Local</div>
+        <div>No data leaves your browser.</div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebar-overlay" hidden></div>
+
+    <!-- Main -->
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
+        <h1 class="tool-heading" id="tool-heading">JSON Formatter</h1>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch theme" title="Switch theme">◐</button>
+      </header>
+
+      <main class="content">
+        <!-- JSON -->
+        <section class="tool-panel" data-tool="json" aria-labelledby="tool-heading">
+          <div class="card">
+            <p class="card-title">Input</p>
+            <label for="json-input" class="sr-only">JSON input</label>
+            <textarea id="json-input" placeholder='{"hello": "world"}' spellcheck="false" aria-describedby="json-status"></textarea>
+            <div class="form-row" style="margin-top:0.75rem">
+              <div class="form-group" style="flex:0 0 auto">
+                <label for="json-indent">Indent</label>
+                <select id="json-indent">
+                  <option value="2">2 spaces</option>
+                  <option value="4">4 spaces</option>
+                  <option value="0">Minified</option>
+                </select>
+              </div>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="json-format">Format</button>
+              <button type="button" class="btn btn-secondary" id="json-minify">Minify</button>
+              <button type="button" class="btn btn-secondary" id="json-validate">Validate</button>
+              <button type="button" class="btn btn-ghost" id="json-clear">Clear</button>
+            </div>
+            <p id="json-status" class="status-message" role="status"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Output</p>
+            <label for="json-output" class="sr-only">JSON output</label>
+            <textarea id="json-output" readonly placeholder="Formatted or minified JSON appears here" spellcheck="false"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" id="json-copy">Copy</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Base64 -->
+        <section class="tool-panel" data-tool="base64" hidden>
+          <div class="card">
+            <p class="card-title">Input</p>
+            <label for="base64-input" class="sr-only">Text or Base64 input</label>
+            <textarea id="base64-input" placeholder="Enter plain text or Base64…" spellcheck="false"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="base64-encode">Encode</button>
+              <button type="button" class="btn btn-primary" id="base64-decode">Decode</button>
+              <button type="button" class="btn btn-secondary" id="base64-swap">Swap ↕</button>
+              <button type="button" class="btn btn-ghost" id="base64-clear">Clear</button>
+            </div>
+            <p id="base64-status" class="status-message" role="status"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Output</p>
+            <label for="base64-output" class="sr-only">Base64 output</label>
+            <textarea id="base64-output" readonly placeholder="Result appears here" spellcheck="false"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" id="base64-copy">Copy</button>
+            </div>
+          </div>
+          <p class="helper-text">Supports full Unicode (UTF-8). Encoding and decoding happen entirely in your browser.</p>
+        </section>
+
+        <!-- URL -->
+        <section class="tool-panel" data-tool="url" hidden>
+          <div class="card">
+            <p class="card-title">Input</p>
+            <label for="url-input" class="sr-only">URL text input</label>
+            <textarea id="url-input" placeholder="Enter text or encoded URL…" spellcheck="false"></textarea>
+            <div class="form-row" style="margin-top:0.75rem">
+              <div class="form-group">
+                <label for="url-component">Mode</label>
+                <select id="url-component">
+                  <option value="component">encodeURIComponent / decodeURIComponent</option>
+                  <option value="uri">encodeURI / decodeURI</option>
+                </select>
+              </div>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="url-encode">Encode</button>
+              <button type="button" class="btn btn-primary" id="url-decode">Decode</button>
+              <button type="button" class="btn btn-secondary" id="url-swap">Swap ↕</button>
+              <button type="button" class="btn btn-ghost" id="url-clear">Clear</button>
+            </div>
+            <p id="url-status" class="status-message" role="status"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Output</p>
+            <label for="url-output" class="sr-only">URL output</label>
+            <textarea id="url-output" readonly placeholder="Result appears here" spellcheck="false"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" id="url-copy">Copy</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- JWT -->
+        <section class="tool-panel" data-tool="jwt" hidden>
+          <div class="warning-banner" role="alert">
+            <span aria-hidden="true">⚠️</span>
+            <div>
+              <strong>Signature is not verified.</strong> This tool only decodes the header and payload locally.
+              Never paste production secrets or tokens into untrusted websites. Prefer running this offline.
+            </div>
+          </div>
+          <div class="card">
+            <p class="card-title">JWT</p>
+            <label for="jwt-input" class="sr-only">JWT token</label>
+            <textarea id="jwt-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." spellcheck="false" rows="4"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="jwt-decode">Decode</button>
+              <button type="button" class="btn btn-ghost" id="jwt-clear">Clear</button>
+            </div>
+            <p id="jwt-status" class="status-message" role="status"></p>
+          </div>
+          <div class="jwt-columns">
+            <div class="card">
+              <p class="card-title">Header</p>
+              <pre class="output-block" id="jwt-header" aria-live="polite"></pre>
+              <div class="btn-group">
+                <button type="button" class="btn btn-secondary" id="jwt-copy-header">Copy Header</button>
+              </div>
+            </div>
+            <div class="card">
+              <p class="card-title">Payload</p>
+              <pre class="output-block" id="jwt-payload" aria-live="polite"></pre>
+              <div class="btn-group">
+                <button type="button" class="btn btn-secondary" id="jwt-copy-payload">Copy Payload</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- UUID -->
+        <section class="tool-panel" data-tool="uuid" hidden>
+          <div class="card">
+            <p class="card-title">UUID v4 Generator</p>
+            <div class="form-row">
+              <div class="form-group" style="max-width:120px">
+                <label for="uuid-count">Count</label>
+                <input type="number" id="uuid-count" min="1" max="100" value="1" />
+              </div>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="uuid-generate">Generate</button>
+              <button type="button" class="btn btn-ghost" id="uuid-clear">Clear</button>
+            </div>
+            <p id="uuid-status" class="status-message" role="status"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Output</p>
+            <label for="uuid-output" class="sr-only">Generated UUIDs</label>
+            <textarea id="uuid-output" readonly rows="6" spellcheck="false"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" id="uuid-copy">Copy</button>
+            </div>
+          </div>
+          <p class="helper-text">Uses <code>crypto.randomUUID()</code> or <code>crypto.getRandomValues()</code> when available for cryptographically secure randomness.</p>
+        </section>
+
+        <!-- SHA-256 -->
+        <section class="tool-panel" data-tool="hash" hidden>
+          <div class="card">
+            <p class="card-title">Input</p>
+            <label for="hash-input" class="sr-only">Text to hash</label>
+            <textarea id="hash-input" placeholder="Enter text to hash…" spellcheck="false"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="hash-generate">Compute SHA-256</button>
+              <button type="button" class="btn btn-ghost" id="hash-clear">Clear</button>
+            </div>
+            <p id="hash-status" class="status-message" role="status"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Digest (hex)</p>
+            <label for="hash-output" class="sr-only">SHA-256 hex digest</label>
+            <textarea id="hash-output" readonly rows="3" spellcheck="false" placeholder="Hex digest appears here"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" id="hash-copy">Copy</button>
+            </div>
+          </div>
+          <p class="helper-text">Uses the Web Crypto API (<code>crypto.subtle.digest</code>). Input is never sent anywhere.</p>
+        </section>
+
+        <!-- Timestamp -->
+        <section class="tool-panel" data-tool="timestamp" hidden>
+          <div class="card">
+            <p class="card-title">Current time</p>
+            <p><strong id="ts-now">—</strong></p>
+            <button type="button" class="btn btn-secondary" id="ts-now-btn">Use now</button>
+          </div>
+          <div class="card">
+            <p class="card-title">Unix → Human</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="ts-unix">Unix timestamp</label>
+                <input type="text" id="ts-unix" placeholder="e.g. 1718000000" inputmode="numeric" />
+              </div>
+              <div class="form-group" style="max-width:120px">
+                <label for="ts-unit">Unit</label>
+                <select id="ts-unit">
+                  <option value="s">Seconds</option>
+                  <option value="ms">Milliseconds</option>
+                </select>
+              </div>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="ts-to-human">Convert to date</button>
+            </div>
+          </div>
+          <div class="card">
+            <p class="card-title">Date → Unix</p>
+            <div class="form-group">
+              <label for="ts-date">Date / time string or ISO</label>
+              <input type="text" id="ts-date" placeholder="2024-06-10T12:00:00Z or local format" />
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="ts-to-unix">Convert to Unix</button>
+              <button type="button" class="btn btn-ghost" id="ts-clear">Clear</button>
+            </div>
+            <p id="ts-status" class="status-message" role="status"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Results</p>
+            <div class="form-group">
+              <label for="ts-human">Local string</label>
+              <div class="output-with-actions">
+                <input type="text" id="ts-human" readonly />
+                <button type="button" class="btn btn-ghost" id="ts-copy-human" aria-label="Copy local string">Copy</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="ts-iso">ISO 8601</label>
+              <div class="output-with-actions">
+                <input type="text" id="ts-iso" readonly />
+                <button type="button" class="btn btn-ghost" id="ts-copy-iso" aria-label="Copy ISO">Copy</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="ts-unix-out">Unix (seconds)</label>
+              <div class="output-with-actions">
+                <input type="text" id="ts-unix-out" readonly />
+                <button type="button" class="btn btn-ghost" id="ts-copy-unix" aria-label="Copy Unix">Copy</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Text Counter -->
+        <section class="tool-panel" data-tool="textstats" hidden>
+          <div class="card">
+            <p class="card-title">Text</p>
+            <label for="text-input" class="sr-only">Text to analyze</label>
+            <textarea id="text-input" placeholder="Paste or type text…" spellcheck="true" rows="10"></textarea>
+            <div class="btn-group">
+              <button type="button" class="btn btn-ghost" id="text-clear">Clear</button>
+            </div>
+          </div>
+          <div class="card">
+            <p class="card-title">Statistics</p>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value" id="stat-chars">0</div>
+                <div class="stat-label">Characters</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="stat-chars-nospace">0</div>
+                <div class="stat-label">Chars (no spaces)</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="stat-words">0</div>
+                <div class="stat-label">Words</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="stat-lines">0</div>
+                <div class="stat-label">Lines</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="stat-bytes">0</div>
+                <div class="stat-label">UTF-8 Bytes</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Regex -->
+        <section class="tool-panel" data-tool="regex" hidden>
+          <div class="card">
+            <p class="card-title">Pattern & Flags</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="regex-pattern">Regular expression</label>
+                <input type="text" id="regex-pattern" placeholder="e.g. \b\w+@\w+\.\w+\b" spellcheck="false" />
+              </div>
+              <div class="form-group" style="max-width:120px">
+                <label for="regex-flags">Flags</label>
+                <input type="text" id="regex-flags" value="g" placeholder="gimsuy" spellcheck="false" maxlength="6" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="regex-test">Test string</label>
+              <textarea id="regex-test" placeholder="Text to match against…" spellcheck="false" rows="5"></textarea>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="regex-test-btn">Test</button>
+              <button type="button" class="btn btn-ghost" id="regex-clear">Clear</button>
+            </div>
+            <p id="regex-status" class="status-message" role="status"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Matches</p>
+            <div id="regex-results" aria-live="polite">
+              <p class="empty-state">Run a test to see matches.</p>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" id="regex-copy">Copy results</button>
+            </div>
+          </div>
+          <p class="helper-text">Matching is time-bounded to reduce the risk of the UI freezing on pathological patterns. Very large inputs are rejected.</p>
+        </section>
+
+        <!-- Color -->
+        <section class="tool-panel" data-tool="color" hidden>
+          <div class="card">
+            <p class="card-title">Input</p>
+            <div class="color-picker-row">
+              <input type="color" id="color-picker" value="#0ea5e9" aria-label="Color picker" />
+              <div class="form-group" style="flex:1">
+                <label for="color-input">HEX, RGB, or HSL</label>
+                <input type="text" id="color-input" placeholder="#0EA5E9 or rgb(14,165,233) or hsl(199,89%,48%)" spellcheck="false" />
+              </div>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="color-convert">Convert</button>
+              <button type="button" class="btn btn-ghost" id="color-clear">Clear</button>
+            </div>
+            <p id="color-status" class="status-message" role="status"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Preview</p>
+            <div class="color-preview" id="color-preview" role="img" aria-label="Color preview"></div>
+            <div class="form-group">
+              <label for="color-hex">HEX</label>
+              <div class="output-with-actions">
+                <input type="text" id="color-hex" readonly />
+                <button type="button" class="btn btn-ghost" id="color-copy-hex" aria-label="Copy HEX">Copy</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="color-rgb">RGB</label>
+              <div class="output-with-actions">
+                <input type="text" id="color-rgb" readonly />
+                <button type="button" class="btn btn-ghost" id="color-copy-rgb" aria-label="Copy RGB">Copy</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="color-hsl">HSL</label>
+              <div class="output-with-actions">
+                <input type="text" id="color-hsl" readonly />
+                <button type="button" class="btn btn-ghost" id="color-copy-hsl" aria-label="Copy HSL">Copy</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container" aria-live="polite" aria-relevant="additions"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

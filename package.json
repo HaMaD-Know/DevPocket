@@ -1,0 +1,33 @@
+{
+  "name": "devpocket",
+  "version": "1.0.0",
+  "description": "DevPocket — A privacy-first developer toolkit with essential encoding, formatting, and utility tools. All processing happens locally in your browser.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.js",
+    "test:unit": "node tests/run-tests.js",
+    "start": "npx serve . -l 3000",
+    "lint": "echo 'No linter configured; review code manually.'"
+  },
+  "keywords": [
+    "developer-tools",
+    "json-formatter",
+    "base64",
+    "jwt",
+    "uuid",
+    "sha256",
+    "privacy",
+    "offline",
+    "vanilla-js"
+  ],
+  "author": "DevPocket Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
